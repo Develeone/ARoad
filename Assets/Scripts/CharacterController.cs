@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterPositionController : MonoBehaviour {
+public class CharacterController : MonoBehaviour {
 
 	public Transform character;
 
