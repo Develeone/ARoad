@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class Coordinates {
+public class Coordinate {
 	private float _latitude;
 	private float _longitude;
 
-	public Coordinates(float __latitude = 0, float __longitude = 0) {
+	public Coordinate(float __latitude = 0, float __longitude = 0) {
 		_latitude = __latitude;
 		_longitude = __longitude;
 	}
@@ -20,7 +20,7 @@ public class Coordinates {
 	}
 
 	// Расстояние меж текущими и новыми координатами
-	public float distanceToNewCoordinates(Coordinates newCoordinates)
+	public float distanceToNewCoordinates(Coordinate newCoordinates)
 	{
 		float theta = _longitude - newCoordinates.longitude; // Сколько мы прошли по долготе в ебучих морских милях
 		float dist = 	Mathf.Sin(Mathf.Deg2Rad * _latitude) * // Получаем синус широты в градусах
