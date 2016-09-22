@@ -1,0 +1,81 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class GpsTracking : MonoBehaviour {
+
+    // Use this for initialization
+    static public Coordinates currentCoordinates = new Coordinates(); // Координаты в текущий момент
+    static public Coordinates startCoordinates = new Coordinates(); // Координаты в момент запуска приложения
+
+    string displayMessage = ""; // Вывод справочной инфы в OnGUI
+
+    // Update is called once per frame
+    IEnumerator Start()
+    {
+        // Если у нашего юзера отключена геолокация
+        // TODO: Вывод ошибки!
+        if (!Input.location.isEnabledByUser)
+        {
+            Debug.LogError("Location service disabled by user!");
+            displayMessage = "Location service disabled by user!";
+            yield break;
+        }
+
+        // Запускаем сервис
+        Input.location.Start(1f, 1f);
+
+        // Ждем инициализации
+        int maxWait = 20;
+        while (Input.location.status != LocationServiceStatus.Initializing && maxWait > 0)
+        {
+            yield return new WaitForSeconds(1);
+            maxWait--;
+            Debug.Log("1 second left");
+            displayMessage = "1 second left";
+        }
+
+        // Если не успел иницализироваться
+        // TODO: Вывод ошибки!
+        if (maxWait < 1)
+        {
+            Debug.LogError("Location service timed out!");
+            displayMessage = "Location service timed out!";
+            yield break;
+        }
+
+        // Если подключение закрашилось
+        // TODO: Вывод ошибки!
+        if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            Debug.LogError("Location service connection failed!");
+            displayMessage = "Location service connection failed!";
+            yield break;
+        }
+        else {
+            // Если всё прошло успешно
+            Debug.Log("Success!");
+            startCoordinates = new Coordinates(Input.location.lastData.latitude, Input.location.lastData.longitude);
+            currentCoordinates = startCoordinates;
+        }
+
+    }
+
+    void Update()
+    {
+        Coordinates lastData = new Coordinates(Input.location.lastData.latitude, Input.location.lastData.longitude);
+
+        if (Input.location.status == LocationServiceStatus.Running)
+        {
+            if (currentCoordinates.latitude != lastData.latitude || currentCoordinates.longitude != lastData.longitude)
+            {
+                currentCoordinates = new Coordinates(lastData.latitude, lastData.longitude);
+            }
+            displayMessage = currentCoordinates.latitude + " " + currentCoordinates.longitude + " " + Input.compass.trueHeading.ToString();
+        }
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Label(displayMessage);
+    }
+}

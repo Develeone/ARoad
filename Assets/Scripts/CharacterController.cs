@@ -13,53 +13,11 @@ public class CharacterPositionController : MonoBehaviour {
 
 	string displayMessage = ""; // Вывод справочной инфы в OnGUI
 
-	IEnumerator Start () {
-		// Если у нашего юзера отключена геолокация
-		// TODO: Вывод ошибки!
-		if (!Input.location.isEnabledByUser) {
-			Debug.LogError ("Location service disabled by user!");
-			displayMessage = "Location service disabled by user!";
-			yield break;
-		}
+	void Start () {
 
 		// Запускаем сервис
 		Input.compass.enabled = true;
 		Input.gyro.enabled = true;
-		Input.location.Start(1f, 1f);
-
-		// Ждем инициализации
-		int maxWait = 20;
-		while (Input.location.status != LocationServiceStatus.Initializing && maxWait > 0) {
-			yield return new WaitForSeconds (1);
-			maxWait--;
-			Debug.Log ("1 second left");
-			displayMessage = "1 second left";
-		}
-
-		// Если не успел иницализироваться
-		// TODO: Вывод ошибки!
-		if (maxWait < 1) {
-			Debug.LogError ("Location service timed out!");
-			displayMessage = "Location service timed out!";
-			yield break;
-		}
-
-		// Если подключение закрашилось
-		// TODO: Вывод ошибки!
-		if (Input.location.status == LocationServiceStatus.Failed) {
-			Debug.LogError ("Location service connection failed!");
-			displayMessage = "Location service connection failed!";
-			yield break;
-		} else {
-			// Если всё прошло успешно
-			Debug.Log ("Success!");
-			startCoordinates = new Coordinates (Input.location.lastData.latitude, Input.location.lastData.longitude);
-			currentCoordinates = startCoordinates;
-
-			// Тут мы типа отправляем на сервак наши стартовые GPS-координаты,
-			// а игровые координаты будут 0,0,0.
-		}
-
 	}
 
 
@@ -70,19 +28,6 @@ public class CharacterPositionController : MonoBehaviour {
     private Quaternion _compassOrientation = Quaternion.identity;
 	
 	void Update () {
-		// Данные GPS-ника пишем в переменную
-		Coordinates lastData = new Coordinates (Input.location.lastData.latitude, Input.location.lastData.longitude);
-
-		if (Input.location.status == LocationServiceStatus.Running) {
-			if (currentCoordinates.latitude != lastData.latitude || currentCoordinates.longitude != lastData.longitude) {
-				// Позиционирование
-				currentCoordinates = new Coordinates (lastData.latitude, lastData.longitude);
-			}
-
-			displayMessage = currentCoordinates.latitude + " " + currentCoordinates.longitude + " " + Input.compass.trueHeading.ToString();
-		}
-
-
 
 		// Ротация с помощью компаса (должна была бы работать)
 		float xrot = Mathf.Atan2(Input.acceleration.z, Input.acceleration.y);
@@ -152,6 +97,6 @@ public class CharacterPositionController : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		//GUILayout.Label (displayMessage);
+		GUILayout.Label (displayMessage);
 	}
 }
