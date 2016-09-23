@@ -8,13 +8,12 @@ public class CharacterController : MonoBehaviour {
 	Vector2 characterPosition = new Vector2 (); // в метрах - на карте сцены Юнити
 	public float characterRotation = 0;
 
-	public Coordinates currentCoordinates = new Coordinates(); // Координаты в текущий момент
-	public Coordinates startCoordinates = new Coordinates(); // Координаты в момент запуска приложения
+	public Coordinate currentCoordinate = new Coordinate(); // Координаты в текущий момент
+	public Coordinate startCoordinate = new Coordinate(); // Координаты в момент запуска приложения
 
 	string displayMessage = ""; // Вывод справочной инфы в OnGUI
 
 	void Start () {
-
 		// Запускаем сервис
 		Input.compass.enabled = true;
 		Input.gyro.enabled = true;
@@ -78,19 +77,19 @@ public class CharacterController : MonoBehaviour {
 
 */
 
-		//Debug.Log(distanceBetweenCoordinates(float currentLatitude, float longitude1, float latitude2, float longitude2));
+		//Debug.Log(distanceBetweenCoordinate(float currentLatitude, float longitude1, float latitude2, float longitude2));
 
 		if (Input.GetKey (KeyCode.LeftArrow))
-			currentCoordinates.latitude -= 0.00001f;
+			currentCoordinate.latitude -= 0.00001f;
 		if (Input.GetKey (KeyCode.RightArrow))
-			currentCoordinates.latitude += 0.00001f;
+			currentCoordinate.latitude += 0.00001f;
 		if (Input.GetKey (KeyCode.UpArrow))
-			currentCoordinates.longitude += 0.00001f;
+			currentCoordinate.longitude += 0.00001f;
 		if (Input.GetKey (KeyCode.DownArrow))
-			currentCoordinates.longitude -= 0.00001f;
+			currentCoordinate.longitude -= 0.00001f;
 
-		characterPosition.x = (currentCoordinates.latitude - startCoordinates.latitude) * 10000f;
-		characterPosition.y = (currentCoordinates.longitude - startCoordinates.longitude) * 10000f;
+		characterPosition.x = (currentCoordinate.latitude - startCoordinate.latitude) * 10000f;
+		characterPosition.y = (currentCoordinate.longitude - startCoordinate.longitude) * 10000f;
 
 		Vector3 targetPosition = new Vector3 (characterPosition.x, character.position.y, characterPosition.y);
 		character.position = Vector3.Lerp(character.position, targetPosition, Time.deltaTime * 15f);
