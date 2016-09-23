@@ -18,10 +18,11 @@ public class MovementController : MonoBehaviour {
 	public Vector3 velocity = Vector3.zero;
 
 	void Update () {
+
 		float rotation = Input.compass.trueHeading + 75;
 		rotation = rotation > 359 ? rotation - 359 : rotation;
 		characterRotation = Mathf.LerpAngle(characterRotation, rotation, Time.deltaTime);
-		character.eulerAngles = new Vector3 (0, characterRotation, 0);
+		character.eulerAngles = new Vector3 (Input.gyro.gravity.x, characterRotation, Input.gyro.gravity.z);
 
 		characterPosition = CoordinatesConverter.ConvertCoordinate(GpsTracking.currentCoordinate);
 
