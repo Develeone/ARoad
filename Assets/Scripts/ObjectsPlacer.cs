@@ -13,6 +13,11 @@ public class ObjectsPlacer : MonoBehaviour
     public List<Vector2> sceneParkingCoordinates    = new List<Vector2>();
     public List<Vector2> scenePitStopCoordinates    = new List<Vector2>();
 
+    public GameObject[] instantietedCams;
+    public GameObject[] instantietedGasStations;
+    public GameObject[] instantietedParkings;
+    public GameObject[] instantietedPitStops;
+
     public GameObject speedCamPointer;
     public GameObject gasStationPointer;
     public GameObject parkingPointer;
@@ -46,6 +51,11 @@ public class ObjectsPlacer : MonoBehaviour
         sceneGasStationCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(gasolinesFile));
         sceneParkingCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(parkingFile));
         scenePitStopCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(pitStopFile));
+
+        instantietedCams        = new GameObject[sceneCamCoordinates.Count];
+        instantietedGasStations = new GameObject[sceneGasStationCoordinates.Count];
+        instantietedParkings    = new GameObject[sceneParkingCoordinates.Count];
+        instantietedPitStops    = new GameObject[scenePitStopCoordinates.Count];
     }
 
     void OnGUI()
@@ -63,10 +73,10 @@ public class ObjectsPlacer : MonoBehaviour
         if (!GpsTracking.GpsReady)
             return;
 
-        InstancePointer(sceneCamCoordinates, 500, speedCamPointer, camPointersParent, ref camPointersCount, false);
-        InstancePointer(sceneGasStationCoordinates, 2000, gasStationPointer, gasStationPointerParent, ref gasStationPointersCount, true);
-        InstancePointer(sceneParkingCoordinates, 1000, parkingPointer, parkingPointerParent, ref parkingPointersCount, false);
-        InstancePointer(scenePitStopCoordinates, 1000, pitStopPointer, pitStopPointerParent, ref pitStopPointersCount, false);
+        InstancePointer(sceneCamCoordinates, 500, speedCamPointer, camPointersParent, ref camPointersCount, false, instantietedCams);
+        InstancePointer(sceneGasStationCoordinates, 2000, gasStationPointer, gasStationPointerParent, ref gasStationPointersCount, true, instantietedGasStations);
+        InstancePointer(sceneParkingCoordinates, 1000, parkingPointer, parkingPointerParent, ref parkingPointersCount, false, instantietedParkings);
+        InstancePointer(scenePitStopCoordinates, 1000, pitStopPointer, pitStopPointerParent, ref pitStopPointersCount, false, instantietedPitStops);
 
     }
 
@@ -80,17 +90,22 @@ public class ObjectsPlacer : MonoBehaviour
         return sceneCoordinateList;
     }
 
-    void InstancePointer(List<Vector2> sceneCoordinateList, int requiredDistance, GameObject currentPointer, Transform pointerParent, ref int counter, bool setPointerText)
+    void InstancePointer(List<Vector2> sceneCoordinateList, int requiredDistance, GameObject currentPointer, Transform pointerParent, ref int counter, bool setPointerText, GameObject[] instantietedPointerList)
     {
 
         for (int i = 0; i < sceneCoordinateList.Count; i++)
         {
             Vector3 currentPointerPosition = new Vector3(sceneCoordinateList[i].x, 5, sceneCoordinateList[i].y);
-            float distanceToObject = Math.Abs(Vector3.Distance(new Vector3(GpsTracking.currentCoordinate.longitude, 5, GpsTracking.currentCoordinate.latitude), currentPointerPosition));
 
-            if (distanceToObject < requiredDistance)
+
+
+            float distanceToObject = Math.Abs(Vector3.Distance(new Vector3(MovementController.characterPosition.x, 5, MovementController.characterPosition.y), currentPointerPosition));
+
+            if (distanceToObject < requiredDistance && instantietedPointerList[i] == null)
             {
                 GameObject newPointer = (GameObject)GameObject.Instantiate(currentPointer, currentPointerPosition, Quaternion.identity);
+
+                instantietedPointerList[i] = newPointer;
 
                 if (setPointerText)
                 {
@@ -101,6 +116,13 @@ public class ObjectsPlacer : MonoBehaviour
                 newPointer.transform.parent = pointerParent;
                 counter++;
             }
+            else if (distanceToObject > requiredDistance && instantietedPointerList[i] != null)
+            {
+                GameObject.Destroy(instantietedPointerList[i]);
+                instantietedPointerList[i] = null;
+                counter--;
+            }
+                
         }
     
     }
