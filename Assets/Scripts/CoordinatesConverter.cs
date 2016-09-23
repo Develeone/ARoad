@@ -12,7 +12,7 @@ public static class CoordinatesConverter {
     {
         Coordinate startCoordinate = GpsTracking.startCoordinate;
 
-        float lat_diff = startCoordinate.latitude - gpsCoordinate.latitude;
+        float lat_diff = gpsCoordinate.latitude - startCoordinate.latitude;
         float lon_diff = startCoordinate.longitude - gpsCoordinate.longitude;
 
 		Debug.LogAssertion (startCoordinate.latitude + " " + startCoordinate.longitude + " " + lat_diff + " " + lon_diff);
