@@ -11,8 +11,6 @@ public class MovementController : MonoBehaviour {
 	public Coordinate currentCoordinate = new Coordinate(); // Координаты в текущий момент
 	public Coordinate startCoordinate = new Coordinate(); // Координаты в момент запуска приложения
 
-	string displayMessage = ""; // Вывод справочной инфы в OnGUI
-
 	void Start () {
 		// Запускаем сервис
 		Input.compass.enabled = true;
@@ -94,6 +92,6 @@ public class MovementController : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		GUILayout.Label (displayMessage);
+		GUILayout.Label (CoordinatesConverter.ConvertCoordinate(currentCoordinate).ToString());
 	}
 }

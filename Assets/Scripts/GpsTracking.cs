@@ -9,8 +9,11 @@ public class GpsTracking : MonoBehaviour {
 
     string displayMessage = ""; // Вывод справочной инфы в OnGUI
 
-    // Update is called once per frame
-    IEnumerator Start()
+	void Awake () {
+		StartCoroutine ("StartTracking");
+	}
+
+    IEnumerator StartTracking()
     {
         #if UNITY_EDITOR
             startCoordinate = new Coordinate(43.02749f, 131.8884f);

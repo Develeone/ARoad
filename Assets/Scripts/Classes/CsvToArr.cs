@@ -17,8 +17,8 @@ public class CsvToArr : MonoBehaviour {
             String[] line = file.ReadLine().Split(';');
             Coordinate coordinate = new Coordinate();
 
-            coordinate.longitude = float.Parse(line[0]);
-            coordinate.latitude = float.Parse(line[1]);
+            coordinate.longitude = float.Parse(line[1]);
+            coordinate.latitude = float.Parse(line[0]);
 
             data.Add(coordinate);
         }
