@@ -6,12 +6,12 @@ using System;
 
 public class ObjectsPlacer : MonoBehaviour {
 
-    public CsvToArr camCoordinates;
+	public List<Coordinate> camCoordinates;
     public List<Vector2> sceneCamCoordinates = new List<Vector2>();
 
     // Use this for initialization
     void Start () {
-        camCoordinates = new CsvToArr();
+		camCoordinates = CsvParser.ParseCsv();
 
         worldToSceneCoordinates();
         Debug.Log(sceneCamCoordinates[0]);
@@ -29,7 +29,7 @@ public class ObjectsPlacer : MonoBehaviour {
 
     void worldToSceneCoordinates()
     {
-        foreach (Coordinate elem in camCoordinates.data)
+        foreach (Coordinate elem in camCoordinates)
             sceneCamCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
     }
 

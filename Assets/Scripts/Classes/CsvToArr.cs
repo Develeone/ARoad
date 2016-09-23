@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 
-public class CsvToArr : MonoBehaviour {
-
-    public List<Coordinate> data = new List<Coordinate>();
-
-    public CsvToArr ()
+public static class CsvParser {
+	
+	public static List<Coordinate> ParseCsv ()
     {
+		List<Coordinate> data = new List<Coordinate> ();	
         string filePath = @"Assets\Resources\cams.csv";
         StreamReader file = new StreamReader(filePath);
 
@@ -22,5 +21,7 @@ public class CsvToArr : MonoBehaviour {
 
             data.Add(coordinate);
         }
+
+		return data;
     }
 }
