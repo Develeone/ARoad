@@ -6,15 +6,11 @@ using System;
 
 public class ObjectsPlacer : MonoBehaviour
 {
-
-    public List<Coordinate> camCoordinates;
-    public List<Coordinate> gasStationCoordinates;
     public List<float[]> gasolinesPrises;
-    public List<Coordinate> parkingCoordinates;
 
-    public List<Vector2> sceneCamCoordinates = new List<Vector2>();
+    public List<Vector2> sceneCamCoordinates        = new List<Vector2>();
     public List<Vector2> sceneGasStationCoordinates = new List<Vector2>();
-    public List<Vector2> sceneParkingCoordinates = new List<Vector2>();
+    public List<Vector2> sceneParkingCoordinates    = new List<Vector2>();
 
     public GameObject speedCamPointer;
     public GameObject gasStationPointer;
@@ -31,20 +27,19 @@ public class ObjectsPlacer : MonoBehaviour
     int camPointersCount        = 0;
     int gasStationPointersCount = 0;
     int parkingPointersCount    = 0;
+
+
     
     IEnumerator Start()
     {
-        camCoordinates        = CsvParser.ParseCsvCoordinates(camsFile);
-
-        gasStationCoordinates = CsvParser.ParseCsvCoordinates(gasolinesFile);
-        gasolinesPrises       = CsvParser.ParceCsvPrises(gasolinesFile);
-
-        parkingCoordinates    = CsvParser.ParseCsvCoordinates(parkingFile);
+        List<float[]> gasolinesPrises           = CsvParser.ParceCsvPrises(gasolinesFile);
 
         while (!GpsTracking.GpsReady)
             yield return new WaitForSeconds(1);
 
-        worldToSceneCoordinates();
+        sceneCamCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(camsFile));
+        sceneGasStationCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(gasolinesFile));
+        sceneParkingCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(parkingFile));
     }
 
     void OnGUI()
@@ -104,16 +99,14 @@ public class ObjectsPlacer : MonoBehaviour
     }
 
 
-    void worldToSceneCoordinates()
+    List<Vector2> worldToSceneCoordinates(List<Coordinate> worldCoordinateList)
     {
-        foreach (Coordinate elem in camCoordinates)
-            sceneCamCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
+        List<Vector2> sceneCoordinateList = new List<Vector2>(worldCoordinateList.Count);
 
-        foreach (Coordinate elem in gasStationCoordinates)
-            sceneGasStationCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
+        foreach (Coordinate elem in worldCoordinateList)
+            sceneCoordinateList.Add(CoordinatesConverter.ConvertCoordinate(elem));
 
-        foreach (Coordinate elem in parkingCoordinates)
-            sceneParkingCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
+        return sceneCoordinateList;
     }
 
 }
