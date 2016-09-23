@@ -20,7 +20,7 @@ public class GpsTracking : MonoBehaviour {
 
 		#if UNITY_EDITOR
 			yield return new WaitForSeconds(5);
-            startCoordinate = new Coordinate(43.02749f, 131.8884f);
+            startCoordinate = new Coordinate(43.025191f, 131.8923505f);
 			currentCoordinate = startCoordinate;
 
 			Debug.Log ("GPS Tracker ready! Start coordinates are set to: " + startCoordinate.latitude + " " + startCoordinate.longitude);
