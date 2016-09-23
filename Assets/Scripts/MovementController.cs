@@ -5,7 +5,7 @@ public class MovementController : MonoBehaviour {
 
 	public Transform character;
 
-	public Vector2 characterPosition = new Vector2 (); // в метрах - на карте сцены Юнити
+	static public Vector2 characterPosition = new Vector2 (); // в метрах - на карте сцены Юнити
 	public Vector2 characterPositione = new Vector2 (); // в метрах - на карте сцены Юнити
 	public float characterRotation = 0;
 
