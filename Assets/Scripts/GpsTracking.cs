@@ -4,17 +4,24 @@ using System.Collections;
 public class GpsTracking : MonoBehaviour {
 
     // Use this for initialization
-    static public Coordinate currentCoordinate = new Coordinate(); // Координаты в текущий момент
-    static public Coordinate startCoordinate = new Coordinate(); // Координаты в момент запуска приложения
+	static public Coordinate currentCoordinate = new Coordinate(); // Координаты в текущий момент
+	static public Coordinate startCoordinate = new Coordinate(); // Координаты в момент запуска приложения
 
     string displayMessage = ""; // Вывод справочной инфы в OnGUI
 
-    // Update is called once per frame
-    IEnumerator Start()
+	void Awake () {
+		StartCoroutine ("StartTracking");
+	}
+
+    IEnumerator StartTracking()
     {
-        #if UNITY_EDITOR
+
+
+		#if UNITY_EDITOR
+			yield return new WaitForSeconds(5);
             startCoordinate = new Coordinate(43.02749f, 131.8884f);
-            currentCoordinate = startCoordinate;
+			currentCoordinate = startCoordinate;
+			yield break;
         #endif
 
         // Если у нашего юзера отключена геолокация
@@ -32,7 +39,7 @@ public class GpsTracking : MonoBehaviour {
 
         // Ждем инициализации
         int maxWait = 20;
-        while (Input.location.status != LocationServiceStatus.Initializing && maxWait > 0)
+		while (Input.location.status != LocationServiceStatus.Running && maxWait > 0)
         {
             yield return new WaitForSeconds(1);
             maxWait--;
@@ -64,6 +71,9 @@ public class GpsTracking : MonoBehaviour {
             currentCoordinate = startCoordinate;
         }
 
+
+
+
     }
 
     void Update()
@@ -74,7 +84,7 @@ public class GpsTracking : MonoBehaviour {
         {
             if (currentCoordinate.latitude != lastData.latitude || currentCoordinate.longitude != lastData.longitude)
             {
-                currentCoordinate = new Coordinate(lastData.latitude, lastData.longitude);
+				currentCoordinate = new Coordinate(lastData.latitude, lastData.longitude);
             }
             displayMessage = currentCoordinate.latitude + " " + currentCoordinate.longitude + " " + Input.compass.trueHeading.ToString();
         }
@@ -82,6 +92,7 @@ public class GpsTracking : MonoBehaviour {
 
     void OnGUI()
     {
+		GUILayout.Label ("");
         GUILayout.Label(displayMessage);
     }
 }

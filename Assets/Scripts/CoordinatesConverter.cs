@@ -15,6 +15,8 @@ public static class CoordinatesConverter {
         float lat_diff = gpsCoordinate.latitude - startCoordinate.latitude;
         float lon_diff = startCoordinate.longitude - gpsCoordinate.longitude;
 
+		//Debug.LogAssertion (startCoordinate.latitude + " " + startCoordinate.longitude + " " + lat_diff + " " + lon_diff);
+
         return new Vector2(lat_diff * latCoef, lon_diff * lngCoef);
     }
 }
