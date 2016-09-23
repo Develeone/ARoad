@@ -5,7 +5,7 @@ using System;
 
 public class CsvToArr : MonoBehaviour {
 
-    public List<List<float>> data = new List<List<float>>();
+    public List<Coordinate> data = new List<Coordinate>();
 
     public CsvToArr ()
     {
@@ -15,10 +15,10 @@ public class CsvToArr : MonoBehaviour {
         while (!file.EndOfStream)
         {
             String[] line = file.ReadLine().Split(';');
-            List<float> coordinate = new List<float>();
+            Coordinate coordinate = new Coordinate();
 
-            foreach (String elem in line)
-                coordinate.Add(float.Parse(elem));
+            coordinate.longitude = float.Parse(line[0]);
+            coordinate.latitude = float.Parse(line[1]);
 
             data.Add(coordinate);
         }
