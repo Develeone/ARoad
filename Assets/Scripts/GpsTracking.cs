@@ -7,6 +7,8 @@ public class GpsTracking : MonoBehaviour {
 	static public Coordinate currentCoordinate = new Coordinate(); // Координаты в текущий момент
 	static public Coordinate startCoordinate = new Coordinate(); // Координаты в момент запуска приложения
 
+	static public bool GpsReady = false;
+
     string displayMessage = ""; // Вывод справочной инфы в OnGUI
 
 	void Awake () {
@@ -16,11 +18,14 @@ public class GpsTracking : MonoBehaviour {
     IEnumerator StartTracking()
     {
 
-
 		#if UNITY_EDITOR
 			yield return new WaitForSeconds(5);
             startCoordinate = new Coordinate(43.02749f, 131.8884f);
 			currentCoordinate = startCoordinate;
+
+			Debug.Log ("GPS Tracker ready! Start coordinates are set to: " + startCoordinate.latitude + " " + startCoordinate.longitude);
+	
+			GpsReady = true;
 			yield break;
         #endif
 
@@ -71,9 +76,9 @@ public class GpsTracking : MonoBehaviour {
             currentCoordinate = startCoordinate;
         }
 
+		GpsReady = true;
 
-
-
+		Debug.Log ("GPS Tracker ready! Start coordinates are set to: " + startCoordinate.latitude + " " + startCoordinate.longitude);
     }
 
     void Update()

@@ -11,8 +11,13 @@ public class ObjectsPlacer : MonoBehaviour {
     public GameObject SpeedCamPointer;
 
     // Use this for initialization
-    void Start () {
+	IEnumerator Start () {
 		camCoordinates = CsvParser.ParseCsv();
+
+		while (!GpsTracking.GpsReady) {
+			Debug.Log ("Object Placer is waiting until GPS ready...");
+			yield return new WaitForSeconds (1);
+		}
 
         worldToSceneCoordinates();
 
@@ -32,8 +37,10 @@ public class ObjectsPlacer : MonoBehaviour {
 
     void worldToSceneCoordinates()
     {
-        foreach (Coordinate elem in camCoordinates)
-            sceneCamCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
+		foreach (Coordinate elem in camCoordinates) {
+			Debug.Log (GpsTracking.startCoordinate.latitude + " " + GpsTracking.startCoordinate.longitude + " " + elem.latitude + " " + elem.longitude + " " + CoordinatesConverter.ConvertCoordinate (elem).x + " " + CoordinatesConverter.ConvertCoordinate (elem).y);
+			sceneCamCoordinates.Add (CoordinatesConverter.ConvertCoordinate (elem));
+		}
     }
 
 }
