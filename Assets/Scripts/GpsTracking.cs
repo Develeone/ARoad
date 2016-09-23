@@ -4,8 +4,8 @@ using System.Collections;
 public class GpsTracking : MonoBehaviour {
 
     // Use this for initialization
-    static public Coordinates currentCoordinates = new Coordinates(); // Координаты в текущий момент
-    static public Coordinates startCoordinates = new Coordinates(); // Координаты в момент запуска приложения
+    static public Coordinate currentCoordinate = new Coordinate(); // Координаты в текущий момент
+    static public Coordinate startCoordinate = new Coordinate(); // Координаты в момент запуска приложения
 
     string displayMessage = ""; // Вывод справочной инфы в OnGUI
 
@@ -54,23 +54,23 @@ public class GpsTracking : MonoBehaviour {
         else {
             // Если всё прошло успешно
             Debug.Log("Success!");
-            startCoordinates = new Coordinates(Input.location.lastData.latitude, Input.location.lastData.longitude);
-            currentCoordinates = startCoordinates;
+            startCoordinate = new Coordinate(Input.location.lastData.latitude, Input.location.lastData.longitude);
+            currentCoordinate = startCoordinate;
         }
 
     }
 
     void Update()
     {
-        Coordinates lastData = new Coordinates(Input.location.lastData.latitude, Input.location.lastData.longitude);
+        Coordinate lastData = new Coordinate(Input.location.lastData.latitude, Input.location.lastData.longitude);
 
         if (Input.location.status == LocationServiceStatus.Running)
         {
-            if (currentCoordinates.latitude != lastData.latitude || currentCoordinates.longitude != lastData.longitude)
+            if (currentCoordinate.latitude != lastData.latitude || currentCoordinate.longitude != lastData.longitude)
             {
-                currentCoordinates = new Coordinates(lastData.latitude, lastData.longitude);
+                currentCoordinate = new Coordinate(lastData.latitude, lastData.longitude);
             }
-            displayMessage = currentCoordinates.latitude + " " + currentCoordinates.longitude + " " + Input.compass.trueHeading.ToString();
+            displayMessage = currentCoordinate.latitude + " " + currentCoordinate.longitude + " " + Input.compass.trueHeading.ToString();
         }
     }
 

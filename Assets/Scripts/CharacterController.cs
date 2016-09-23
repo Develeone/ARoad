@@ -18,8 +18,6 @@ public class CharacterController : MonoBehaviour {
 		Input.compass.enabled = true;
 		Input.gyro.enabled = true;
 	}
-
-
 	
 	private double _lastCompassUpdateTime = 0;
     private Quaternion _correction = Quaternion.identity;
