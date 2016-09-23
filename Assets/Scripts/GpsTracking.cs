@@ -19,7 +19,7 @@ public class GpsTracking : MonoBehaviour {
     {
 
 		#if UNITY_EDITOR
-			yield return new WaitForSeconds(5);
+			yield return new WaitForSeconds(1);
             startCoordinate = new Coordinate(43.025191f, 131.8923505f);
 			currentCoordinate = startCoordinate;
 
