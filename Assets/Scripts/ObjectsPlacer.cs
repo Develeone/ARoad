@@ -8,13 +8,16 @@ public class ObjectsPlacer : MonoBehaviour {
 
     public CsvToArr camCoordinates;
     public List<Vector2> sceneCamCoordinates = new List<Vector2>();
+    public GameObject SpeedCamPointer;
 
     // Use this for initialization
     void Start () {
         camCoordinates = new CsvToArr();
 
         worldToSceneCoordinates();
-        Debug.Log(sceneCamCoordinates[0]);
+
+        foreach (Vector2 elem in sceneCamCoordinates)
+            GameObject.Instantiate(SpeedCamPointer, new Vector3(elem.x, 5, elem.y), Quaternion.identity);
     }
 	
 	// Update is called once per frame
