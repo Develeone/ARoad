@@ -12,12 +12,18 @@ public class GpsTracking : MonoBehaviour {
     // Update is called once per frame
     IEnumerator Start()
     {
+        #if UNITY_EDITOR
+            startCoordinate = new Coordinate(43.02749f, 131.8884f);
+            currentCoordinate = startCoordinate;
+        #endif
+
         // Если у нашего юзера отключена геолокация
         // TODO: Вывод ошибки!
         if (!Input.location.isEnabledByUser)
         {
             Debug.LogError("Location service disabled by user!");
             displayMessage = "Location service disabled by user!";
+
             yield break;
         }
 
