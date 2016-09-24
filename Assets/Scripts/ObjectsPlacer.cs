@@ -134,13 +134,8 @@ public class ObjectsPlacer : MonoBehaviour
 
                 if (setPointerText)
                 {
-<<<<<<< HEAD
-                    TextMesh priceTextMesh = newPointer.GetComponentInChildren<TextMesh>();
-                    priceTextMesh.text = gasolinesPrises[i][PlayerPrefs.GetInt("gasolineType")] + "р";
-=======
                     TextMesh priceTextMesh = textMeshes[distanceIndex];
-                    priceTextMesh.text = gasolinesPrises[i][0] + "р";
->>>>>>> 158c45f0dd1c2d566a0923f602d9016788addcc8
+                    priceTextMesh.text = gasolinesPrises[i][PlayerPrefs.GetInt("gasolineType")] + "р";
                 }
 
                 newPointer.transform.parent = pointerParent;
