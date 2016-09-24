@@ -59,14 +59,16 @@ public class ObjectsPlacer : MonoBehaviour
             }
         }
 
-        foreach (Vector2 elem in sceneGasStationCoordinates)
+        for (int i = 0; i < sceneGasStationCoordinates.Count; i++)
         {
-            Vector3 currentGasStation = new Vector3(elem.x, 5, elem.y);
+            Vector3 currentGasStation = new Vector3(sceneGasStationCoordinates[i].x, 5, sceneGasStationCoordinates[i].y);
             float distanceToObject    = Math.Abs(Vector3.Distance(new Vector3(GpsTracking.currentCoordinate.longitude, 5, GpsTracking.currentCoordinate.latitude), currentGasStation));
 
-            if (distanceToObject < 1000)
+            if (distanceToObject < 3000)
             {
                 GameObject newGasStationPointer = (GameObject)GameObject.Instantiate(gasStationPointer, currentGasStation, Quaternion.identity);
+                TextMesh priceTextMesh = newGasStationPointer.GetComponentInChildren<TextMesh>();
+                priceTextMesh.text = gasolinesPrises[i][0] + "р";
                 newGasStationPointer.transform.parent = gasStationPointerParent;
                 gasStationPointersCount++;
             }
