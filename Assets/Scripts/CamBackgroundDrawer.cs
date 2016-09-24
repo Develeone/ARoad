@@ -11,8 +11,8 @@ public class CamBackgroundDrawer : MonoBehaviour {
 
 	void Start () {
 		deviceCameraTexture = new WebCamTexture();
-		deviceCameraTexture.requestedWidth = Screen.width;
-		deviceCameraTexture.requestedHeight = Screen.height;
+		deviceCameraTexture.requestedWidth = Screen.width/4;
+		deviceCameraTexture.requestedHeight = Screen.height/4;
 		Renderer camBgRenderer = backgroundCameraBackground.GetComponent<Renderer>();
 		camBgRenderer.material.mainTexture = deviceCameraTexture;
 		deviceCameraTexture.Play();
