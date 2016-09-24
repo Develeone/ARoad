@@ -43,22 +43,38 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	void Update () {
-		if (showCams 			!= (PlayerPrefs.GetInt ("showCam") == 1 ? true : false))
+		if (showCams != (PlayerPrefs.GetInt ("showCam") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showCam", showCams ? 1 : 0);
-		if (showGasStations 	!= (PlayerPrefs.GetInt ("showGasStation") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showGasStations != (PlayerPrefs.GetInt ("showGasStation") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showGasStation", showGasStations ? 1 : 0);
-		if (showParkings 		!= (PlayerPrefs.GetInt ("showParking") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showParkings != (PlayerPrefs.GetInt ("showParking") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showParking", showParkings ? 1 : 0);
-		if (showPitStops 		!= (PlayerPrefs.GetInt ("showPitStop") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showPitStops != (PlayerPrefs.GetInt ("showPitStop") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showPitStop", showPitStops ? 1 : 0);
-		if (showTires			!= (PlayerPrefs.GetInt ("showTire") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showTires != (PlayerPrefs.GetInt ("showTire") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showTire", showTires ? 1 : 0);
-		if (showCrashes 		!= (PlayerPrefs.GetInt ("showCrash") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showCrashes != (PlayerPrefs.GetInt ("showCrash") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showCrash", showCrashes ? 1 : 0);
-		if (showPolice 			!= (PlayerPrefs.GetInt ("showPolice") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showPolice != (PlayerPrefs.GetInt ("showPolice") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showPolice", showPolice ? 1 : 0);
-		if (showMessages 		!= (PlayerPrefs.GetInt ("showMessage") == 1 ? true : false))
+			ObjectsPlacer.settingsChanged = true;
+		}
+		if (showMessages != (PlayerPrefs.GetInt ("showMessage") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showMessage", showMessages ? 1 : 0);
+			ObjectsPlacer.settingsChanged = true;
+		}
 	}
 
 	void OnGUI () {

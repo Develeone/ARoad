@@ -51,8 +51,22 @@ public class ObjectsPlacer : MonoBehaviour
     public Transform policePointerParent;
     public Transform messagePointerParent;
 
+
+	public static bool settingsChanged = false;
+
     IEnumerator Start()
     {
+		/*
+		sceneCamCoordinates        = new List<Vector2>();
+		sceneGasStationCoordinates = new List<Vector2>();
+		sceneParkingCoordinates    = new List<Vector2>();
+		scenePitStopCoordinates    = new List<Vector2>();
+		sceneTiresCoordinates      = new List<Vector2>();
+		sceneCrashCoordinates      = new List<Vector2>();
+		scenePoliceCoordinates     = new List<Vector2>();
+		sceneMessageCoordinates    = new List<Vector2>();
+		*/
+
         gasolinesPrises = CsvParser.ParceCsvPrises(gasolinesFile);
 
         while (!GpsTracking.GpsReady)
@@ -60,18 +74,37 @@ public class ObjectsPlacer : MonoBehaviour
 
         if (PlayerPrefs.GetInt("showCam") == 1)
             sceneCamCoordinates        = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(camsFile));
+		else
+			sceneCamCoordinates        = new List<Vector2>();
 
         if (PlayerPrefs.GetInt("showGasStation") == 1)
             sceneGasStationCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(gasolinesFile));
+		else
+			sceneGasStationCoordinates = new List<Vector2>();
 
         if (PlayerPrefs.GetInt("showParking") == 1)
             sceneParkingCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(parkingFile));
+		else
+			sceneParkingCoordinates    = new List<Vector2>();
 
         if (PlayerPrefs.GetInt("showPitStop") == 1)
             scenePitStopCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(pitStopFile));
+		else
+			scenePitStopCoordinates    = new List<Vector2>();
 
         if (PlayerPrefs.GetInt("showTire") == 1)
             sceneTiresCoordinates      = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(tiresFile));
+		else
+			sceneTiresCoordinates      = new List<Vector2>();
+
+		if (PlayerPrefs.GetInt("showCrash") == 0)
+			sceneCrashCoordinates      = new List<Vector2>();
+
+		if (PlayerPrefs.GetInt("showPolice") == 0)
+			scenePoliceCoordinates     = new List<Vector2>();
+
+		if (PlayerPrefs.GetInt("showMessage") == 0)
+			sceneMessageCoordinates    = new List<Vector2>();
 
         instantietedCams        = new GameObject[sceneCamCoordinates.Count];
         instantietedGasStations = new GameObject[sceneGasStationCoordinates.Count];
@@ -94,6 +127,20 @@ public class ObjectsPlacer : MonoBehaviour
         if (!GpsTracking.GpsReady)
             return;
 
+		if (settingsChanged) {
+			GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject> ();
+			foreach (GameObject objectToDestroy in allObjects) {
+				if (objectToDestroy.transform.parent != null)
+					if (objectToDestroy.transform.parent.name == "ParkingPointers" || 
+						objectToDestroy.transform.parent.name == "PitStopPointers" ||
+						objectToDestroy.transform.parent.name == "GasStationPointers" ||
+						objectToDestroy.transform.parent.name == "SpeedCamPointers")
+						GameObject.Destroy (objectToDestroy);
+			}
+			StartCoroutine ("Start");
+			settingsChanged = false;
+		}
+
         InstancePointer(sceneCamCoordinates, 500, speedCamPointer, camPointersParent, false, instantietedCams);
         InstancePointer(sceneGasStationCoordinates, 1000, gasStationPointer, gasStationPointerParent, true, instantietedGasStations);
         InstancePointer(sceneParkingCoordinates, 1000, parkingPointer, parkingPointerParent, false, instantietedParkings);
@@ -102,7 +149,6 @@ public class ObjectsPlacer : MonoBehaviour
         InstancePointer(sceneCrashCoordinates, 1000, crashPointer, crashPointerParent, false, instantietedCrash);
         InstancePointer(scenePoliceCoordinates, 1000, policePointer, policePointerParent, false, instantietedPolice);
         InstancePointer(sceneMessageCoordinates, 1000, messagePointer, messagePointerParent, false, instantietedMessage);
-
     }
 
     List<Vector2> worldToSceneCoordinates(List<Coordinate> worldCoordinateList)
