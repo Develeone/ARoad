@@ -5,23 +5,21 @@ public static class ServerResponseHandler {
 
     public static void HandleServerResponse(string message)
     {
-        string[] messageParts = message.Split(';');
 
-        Coordinate inputGpsCoordinate = new Coordinate(float.Parse(messageParts[0]), float.Parse(messageParts[1]));
+        string[] messageAttrs = message.Split(';');
+
+        Coordinate inputGpsCoordinate = new Coordinate(float.Parse(messageAttrs[0]), float.Parse(messageAttrs[1]));
         Vector2 inputSceneCoordinate = CoordinatesConverter.ConvertCoordinate(inputGpsCoordinate);
 
-        if (messageParts[2].Equals("trafficAccident"))
+        if (messageAttrs[2].Equals("trafficAccident"))
+            ObjectsPlacer.sceneCrashCoordinates.Add(inputSceneCoordinate);
+        if (messageAttrs[2].Equals("police"))
+            ObjectsPlacer.scenePoliceCoordinates.Add(inputSceneCoordinate);
+        if (messageAttrs[2].Equals("message"))
         {
-
+            ObjectsPlacer.sceneMessageCoordinates.Add(inputSceneCoordinate);
+            ObjectsPlacer.Messages.Add(messageAttrs[3]);
         }
-        if (messageParts[2].Equals("police"))
-        {
 
-        }
-        if (messageParts[2].Equals("message"))
-        {
-
-        }
-        //TODO запихивание в массив из ObjectPlacer
     }
 }
