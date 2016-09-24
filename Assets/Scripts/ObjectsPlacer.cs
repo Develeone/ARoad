@@ -12,50 +12,68 @@ public class ObjectsPlacer : MonoBehaviour
     public List<Vector2> sceneGasStationCoordinates = new List<Vector2>();
     public List<Vector2> sceneParkingCoordinates    = new List<Vector2>();
     public List<Vector2> scenePitStopCoordinates    = new List<Vector2>();
+    public List<Vector2> sceneTiresCoordinates      = new List<Vector2>();
 
     public GameObject[] instantietedCams;
     public GameObject[] instantietedGasStations;
     public GameObject[] instantietedParkings;
     public GameObject[] instantietedPitStops;
+    public GameObject[] instantietedTires;
 
     public GameObject speedCamPointer;
     public GameObject gasStationPointer;
     public GameObject parkingPointer;
     public GameObject pitStopPointer;
+    public GameObject tiresPointer;
 
     public TextAsset camsFile;
     public TextAsset gasolinesFile;
     public TextAsset parkingFile;
     public TextAsset pitStopFile;
+    public TextAsset tiresFile;
 
     public Transform camPointersParent;
     public Transform gasStationPointerParent;
     public Transform parkingPointerParent;
     public Transform pitStopPointerParent;
+    public Transform tiresPointerParent;
 
     int camPointersCount        = 0;
     int gasStationPointersCount = 0;
     int parkingPointersCount    = 0;
     int pitStopPointersCount    = 0;
-
-
+    int tiresPointersCount      = 0;
 
     IEnumerator Start()
     {
-        gasolinesPrises           = CsvParser.ParceCsvPrises(gasolinesFile);
+        gasolinesPrises = CsvParser.ParceCsvPrises(gasolinesFile);
 
         while (!GpsTracking.GpsReady)
             yield return new WaitForSeconds(1);
 
-        sceneCamCoordinates        = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(camsFile));
-        sceneGasStationCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(gasolinesFile));
-        sceneParkingCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(parkingFile));
-        scenePitStopCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(pitStopFile));
+        PlayerPrefs.SetInt("showCam", 1);
+        PlayerPrefs.SetInt("showTires", 1);
+
+        if (PlayerPrefs.GetInt("showCam") == 1)
+            sceneCamCoordinates        = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(camsFile));
+
+        if (PlayerPrefs.GetInt("showGasStation") == 1)
+            sceneGasStationCoordinates = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(gasolinesFile));
+
+        if (PlayerPrefs.GetInt("showParking") == 1)
+            sceneParkingCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(parkingFile));
+
+        if (PlayerPrefs.GetInt("showPitStop") == 1)
+            scenePitStopCoordinates    = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(pitStopFile));
+
+        if (PlayerPrefs.GetInt("showTires") == 1)
+            sceneTiresCoordinates      = worldToSceneCoordinates(CsvParser.ParseCsvCoordinates(tiresFile));
 
         instantietedCams        = new GameObject[sceneCamCoordinates.Count];
         instantietedGasStations = new GameObject[sceneGasStationCoordinates.Count];
         instantietedParkings    = new GameObject[sceneParkingCoordinates.Count];
         instantietedPitStops    = new GameObject[scenePitStopCoordinates.Count];
+        instantietedTires       = new GameObject[sceneTiresCoordinates.Count];
     }
 
     void OnGUI()
@@ -66,6 +84,7 @@ public class ObjectsPlacer : MonoBehaviour
         GUILayout.Label("Gas Station instantiated: " + gasStationPointersCount);
         GUILayout.Label("Parking instantiated: " + parkingPointersCount);
         GUILayout.Label("PitStop instantiated: " + pitStopPointersCount);
+        GUILayout.Label("Tires instantiated: " + tiresPointersCount);
     }
     
     void FixedUpdate()
@@ -74,9 +93,10 @@ public class ObjectsPlacer : MonoBehaviour
             return;
 
         InstancePointer(sceneCamCoordinates, 500, speedCamPointer, camPointersParent, ref camPointersCount, false, instantietedCams);
-        InstancePointer(sceneGasStationCoordinates, 2000, gasStationPointer, gasStationPointerParent, ref gasStationPointersCount, true, instantietedGasStations);
+        InstancePointer(sceneGasStationCoordinates, 1000, gasStationPointer, gasStationPointerParent, ref gasStationPointersCount, true, instantietedGasStations);
         InstancePointer(sceneParkingCoordinates, 1000, parkingPointer, parkingPointerParent, ref parkingPointersCount, false, instantietedParkings);
         InstancePointer(scenePitStopCoordinates, 1000, pitStopPointer, pitStopPointerParent, ref pitStopPointersCount, false, instantietedPitStops);
+        InstancePointer(sceneTiresCoordinates, 1000, tiresPointer, tiresPointerParent, ref tiresPointersCount, false, instantietedTires);
 
     }
 
@@ -110,7 +130,7 @@ public class ObjectsPlacer : MonoBehaviour
                 if (setPointerText)
                 {
                     TextMesh priceTextMesh = newPointer.GetComponentInChildren<TextMesh>();
-                    priceTextMesh.text = gasolinesPrises[i][0] + "р";
+                    priceTextMesh.text = gasolinesPrises[i][PlayerPrefs.GetInt("gasolineType")] + "р";
                 }
 
                 newPointer.transform.parent = pointerParent;
