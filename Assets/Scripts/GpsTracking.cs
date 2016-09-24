@@ -83,7 +83,11 @@ public class GpsTracking : MonoBehaviour {
 
     void Update()
     {
-        Coordinate lastData = new Coordinate(Input.location.lastData.latitude, Input.location.lastData.longitude);
+		#if UNITY_EDITOR
+			return;
+		#endif
+
+		Coordinate lastData = new Coordinate(Input.location.lastData.latitude, Input.location.lastData.longitude);
 
         if (Input.location.status == LocationServiceStatus.Running)
         {
