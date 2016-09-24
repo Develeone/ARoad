@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SettingsController : MonoBehaviour {
+public static class SettingsController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public static bool AddTraficAccident()
+    {
+        NetworkManager.writeSocket(GpsTracking.currentCoordinate.ToString() + ";trafficAccident");
+        return true;
+    }
+
+    public static bool AddPolice()
+    {
+        NetworkManager.writeSocket(GpsTracking.currentCoordinate.ToString() + ";police");
+        return true;
+    }
+
+    public static bool AddMessage(string messageText)
+    {
+        NetworkManager.writeSocket(GpsTracking.currentCoordinate.ToString() + ";message;" + messageText);
+        return true;
+    }
 }

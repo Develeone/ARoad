@@ -7,16 +7,16 @@ using System;
 public class ObjectsPlacer : MonoBehaviour
 {
     public List<float[]> gasolinesPrises;
-    public List<string> Messages;
+    public static List<string> Messages;
 
-    public List<Vector2> sceneCamCoordinates        = new List<Vector2>();
-    public List<Vector2> sceneGasStationCoordinates = new List<Vector2>();
-    public List<Vector2> sceneParkingCoordinates    = new List<Vector2>();
-    public List<Vector2> scenePitStopCoordinates    = new List<Vector2>();
-    public List<Vector2> sceneTiresCoordinates      = new List<Vector2>();
-    public List<Vector2> sceneCrashCoordinates      = new List<Vector2>();
-    public List<Vector2> scenePoliceCoordinates     = new List<Vector2>();
-    public List<Vector2> sceneMessageCoordinates    = new List<Vector2>();
+    public List<Vector2> sceneCamCoordinates               = new List<Vector2>();
+    public List<Vector2> sceneGasStationCoordinates        = new List<Vector2>();
+    public List<Vector2> sceneParkingCoordinates           = new List<Vector2>();
+    public List<Vector2> scenePitStopCoordinates           = new List<Vector2>();
+    public List<Vector2> sceneTiresCoordinates             = new List<Vector2>();
+    public static List<Vector2> sceneCrashCoordinates      = new List<Vector2>();
+    public static List<Vector2> scenePoliceCoordinates     = new List<Vector2>();
+    public static List<Vector2> sceneMessageCoordinates    = new List<Vector2>();
 
     public GameObject[] instantietedCams;
     public GameObject[] instantietedGasStations;
@@ -185,7 +185,7 @@ public class ObjectsPlacer : MonoBehaviour
 
                 if (setPointerText)
                 {
-                    TextMesh priceTextMesh = newPointer.GetComponentInChildren<TextMesh>();
+                    TextMesh priceTextMesh = textMeshes[distanceIndex];
                     priceTextMesh.text = gasolinesPrises[i][PlayerPrefs.GetInt("gasolineType")] + "р";
                 }
 
