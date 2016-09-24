@@ -40,7 +40,7 @@ public class GpsTracking : MonoBehaviour {
         }
 
         // Запускаем сервис
-        Input.location.Start(1f, 1f);
+		Input.location.Start(0.001f, 0.001f);
 
         // Ждем инициализации
         int maxWait = 20;

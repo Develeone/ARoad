@@ -8,6 +8,8 @@ public class UserInterface : MonoBehaviour {
 	public Texture splashScreen;
 	public Texture settingsButton;
 
+	public string[] gasolineTypes;
+
 	float splashScreenVerticalPosition = 0;
 	bool showSettings = false;
 	Rect settingsRect = new Rect(50, 50, Screen.width-100, Screen.height-100);
@@ -21,6 +23,8 @@ public class UserInterface : MonoBehaviour {
 	bool showPolice = false;
 	bool showMessages = false;
 
+	int gasolineType = 0;
+
 	IEnumerator Start () {
 		showCams 		= PlayerPrefs.GetInt ("showCam") == 1 ? true : false;
 		showGasStations = PlayerPrefs.GetInt ("showGasStation") == 1 ? true : false;
@@ -30,6 +34,7 @@ public class UserInterface : MonoBehaviour {
 		showCrashes 	= PlayerPrefs.GetInt ("showCrash") == 1 ? true : false;
 		showPolice 		= PlayerPrefs.GetInt ("showPolice") == 1 ? true : false;
 		showMessages 	= PlayerPrefs.GetInt ("showMessage") == 1 ? true : false;
+		gasolineType 	= PlayerPrefs.GetInt ("gasolineType");
 
 		while (!GpsTracking.GpsReady) {
 			yield return new WaitForSeconds (1);
@@ -75,6 +80,10 @@ public class UserInterface : MonoBehaviour {
 			PlayerPrefs.SetInt ("showMessage", showMessages ? 1 : 0);
 			ObjectsPlacer.settingsChanged = true;
 		}
+		if (gasolineType != PlayerPrefs.GetInt ("gasolineType")) {
+			PlayerPrefs.SetInt ("gasolineType", gasolineType);
+			ObjectsPlacer.settingsChanged = true;
+		}
 	}
 
 	void OnGUI () {
@@ -93,6 +102,9 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	void SettingsContent (int windowId) {
+		GUILayout.Label ("Топливо:");
+		gasolineType 	= GUILayout.SelectionGrid (gasolineType, gasolineTypes, 4);
+
 		showCams 		= GUILayout.Toggle (showCams, "Камеры");
 		showGasStations = GUILayout.Toggle (showGasStations, "Заправки");
 		showParkings 	= GUILayout.Toggle (showParkings, "Парковки");
