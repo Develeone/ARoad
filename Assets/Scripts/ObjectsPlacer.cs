@@ -101,15 +101,20 @@ public class ObjectsPlacer : MonoBehaviour
 
             float distanceToObject = Math.Abs(Vector3.Distance(new Vector3(MovementController.characterPosition.x, 5, MovementController.characterPosition.y), currentPointerPosition));
 
+
             if (distanceToObject < requiredDistance && instantietedPointerList[i] == null)
             {
                 GameObject newPointer = (GameObject)GameObject.Instantiate(currentPointer, currentPointerPosition, Quaternion.identity);
 
                 instantietedPointerList[i] = newPointer;
 
+                TextMesh[] textMeshes = newPointer.GetComponentsInChildren<TextMesh>();
+
+                int distanceIndex = textMeshes[0].text.Equals("Price") ? 0 : 1;
+
                 if (setPointerText)
                 {
-                    TextMesh priceTextMesh = newPointer.GetComponentInChildren<TextMesh>();
+                    TextMesh priceTextMesh = textMeshes[distanceIndex];
                     priceTextMesh.text = gasolinesPrises[i][0] + "р";
                 }
 
