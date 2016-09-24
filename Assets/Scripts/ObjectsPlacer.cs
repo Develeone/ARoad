@@ -7,18 +7,26 @@ using System;
 public class ObjectsPlacer : MonoBehaviour {
 
 	public List<Coordinate> camCoordinates;
-    public List<Vector2> sceneCamCoordinates = new List<Vector2>();
+    public List<Coordinate> gasolinesCoordinates;
+    public List<float[]> gasolinesPrises;
+
+    public List<Vector2> sceneCamCoordinates       = new List<Vector2>();
+    public List<Vector2> sceneGasolinesCoordinates = new List<Vector2>();
+
     public GameObject SpeedCamPointer;
 
 	public TextAsset camsFile;
+    public TextAsset gasolinesFile;
 
-	int i = 0;
+    int i = 0;
 
     // Use this for initialization
 	IEnumerator Start () {
-		camCoordinates = CsvParser.ParseCsv(camsFile);
+		camCoordinates       = CsvParser.ParseCsvCoordinates(camsFile);
+        gasolinesCoordinates = CsvParser.ParseCsvCoordinates(gasolinesFile);
+        gasolinesPrises      = CsvParser.ParceCsvPrises(gasolinesFile);
 
-		while (!GpsTracking.GpsReady) {
+        while (!GpsTracking.GpsReady) {
 			Debug.Log ("Object Placer is waiting until GPS ready...");
 			yield return new WaitForSeconds (1);
 		}
@@ -50,9 +58,12 @@ public class ObjectsPlacer : MonoBehaviour {
     void worldToSceneCoordinates()
     {
 		foreach (Coordinate elem in camCoordinates) {
-			Debug.Log (GpsTracking.startCoordinate.latitude + " " + GpsTracking.startCoordinate.longitude + " " + elem.latitude + " " + elem.longitude + " " + CoordinatesConverter.ConvertCoordinate (elem).x + " " + CoordinatesConverter.ConvertCoordinate (elem).y);
+			//Debug.Log (GpsTracking.startCoordinate.latitude + " " + GpsTracking.startCoordinate.longitude + " " + elem.latitude + " " + elem.longitude + " " + CoordinatesConverter.ConvertCoordinate (elem).x + " " + CoordinatesConverter.ConvertCoordinate (elem).y);
 			sceneCamCoordinates.Add (CoordinatesConverter.ConvertCoordinate (elem));
 		}
+
+        foreach (Coordinate elem in gasolinesCoordinates)
+            sceneGasolinesCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
     }
 
 }
