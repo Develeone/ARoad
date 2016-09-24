@@ -18,4 +18,9 @@ public class Coordinate {
 		get { return _longitude; }
 		set { _longitude = value; }
 	}
+
+    public override string ToString()
+    {
+        return latitude.ToString() + ";" + longitude.ToString();
+    }
 }
