@@ -5,8 +5,11 @@ public class UserInterface : MonoBehaviour {
 
 	public GUISkin FlatGUISkin;
 
-	public Texture splashScreen;
-	public Texture settingsButton;
+	public Texture splashScreenTex;
+	public Texture settingsButtonTex;
+	public Texture addCrashTex;
+	public Texture addPoliceTex;
+	public Texture addMessageTex;
 
 	public string[] gasolineTypes;
 
@@ -89,8 +92,20 @@ public class UserInterface : MonoBehaviour {
 	void OnGUI () {
 		GUI.skin = FlatGUISkin;
 
-		if (GUI.Button (new Rect (0,0,50,50), settingsButton)) {
+		if (GUI.Button (new Rect (0,0,50,50), settingsButtonTex)) {
 			showSettings = !showSettings;
+		}
+
+		if (GUI.Button (new Rect (Screen.width-50,Screen.height-50,50,50), addCrashTex)) {
+			SettingsController.AddTraficAccident ();
+		}
+
+		if (GUI.Button (new Rect (Screen.width-100,Screen.height-50,50,50), addPoliceTex)) {
+			SettingsController.AddPolice ();
+		}
+
+		if (GUI.Button (new Rect (Screen.width-150,Screen.height-50,50,50), addMessageTex)) {
+			SettingsController.AddMessage ("ЛОСОСНИ ХУЙЦА, ШАЛАВА УШАСТАЯ");
 		}
 
 		if (showSettings) {
@@ -98,7 +113,7 @@ public class UserInterface : MonoBehaviour {
 		}
 
 		if (splashScreenVerticalPosition > -Screen.height)
-			GUI.DrawTexture (new Rect(0, splashScreenVerticalPosition, Screen.width, Screen.height), splashScreen);
+			GUI.DrawTexture (new Rect(0, splashScreenVerticalPosition, Screen.width, Screen.height), splashScreenTex);
 	}
 
 	void SettingsContent (int windowId) {
