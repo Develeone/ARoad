@@ -18,6 +18,7 @@ public class ObjectsPlacer : MonoBehaviour
 
     public GameObject speedCamPointer;
     public GameObject gasStationPointer;
+    public GameObject parkingPointer;
 
     public TextAsset camsFile;
     public TextAsset gasolinesFile;
@@ -25,9 +26,11 @@ public class ObjectsPlacer : MonoBehaviour
 
     public Transform camPointersParent;
     public Transform gasStationPointerParent;
+    public Transform parkingPointerParent;
 
     int camPointersCount        = 0;
     int gasStationPointersCount = 0;
+    int parkingPointersCount    = 0;
 
     IEnumerator Start()
     {
@@ -74,6 +77,19 @@ public class ObjectsPlacer : MonoBehaviour
             }
         }
 
+        foreach (Vector2 elem in sceneParkingCoordinates)
+        {
+            Vector3 currentParking = new Vector3(elem.x, 5, elem.y);
+            float distanceToObject = Math.Abs(Vector3.Distance(new Vector3(GpsTracking.currentCoordinate.longitude, 5, GpsTracking.currentCoordinate.latitude), currentParking));
+
+            if (distanceToObject < 500)
+            {
+                GameObject newParkingPointer = (GameObject)GameObject.Instantiate(parkingPointer, currentParking, Quaternion.identity);
+                newParkingPointer.transform.parent = parkingPointerParent;
+                parkingPointersCount++;
+            }
+        }
+
     }
 
     void OnGUI()
@@ -82,6 +98,7 @@ public class ObjectsPlacer : MonoBehaviour
         GUILayout.Label("");
         GUILayout.Label("Camers instantiated: " + camPointersCount);
         GUILayout.Label("Gas Station instantiated: " + gasStationPointersCount);
+        GUILayout.Label("Parking instantiated: " + parkingPointersCount);
     }
 
     // Update is called once per frame
