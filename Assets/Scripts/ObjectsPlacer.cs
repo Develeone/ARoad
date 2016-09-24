@@ -34,8 +34,13 @@ public class ObjectsPlacer : MonoBehaviour {
         worldToSceneCoordinates();
 
 		foreach (Vector2 elem in sceneCamCoordinates) {
-			GameObject.Instantiate (SpeedCamPointer, new Vector3 (elem.x, 5, elem.y), Quaternion.identity);
-			i++;
+            Vector3 currentCam = new Vector3(elem.x, 5, elem.y);
+            float distanceToObject = Math.Abs(Vector3.Distance(new Vector3(GpsTracking.currentCoordinate.longitude, 5, GpsTracking.currentCoordinate.latitude), currentCam));
+            if (distanceToObject < 500)
+            {
+                GameObject.Instantiate(SpeedCamPointer, currentCam, Quaternion.identity);
+                i++;
+            }
 		}
     }
 
