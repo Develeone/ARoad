@@ -102,7 +102,7 @@ public class ObjectsPlacer : MonoBehaviour
             sceneGasStationCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
 
         foreach (Coordinate elem in parkingCoordinates)
-            sceneGasStationCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
+            sceneParkingCoordinates.Add(CoordinatesConverter.ConvertCoordinate(elem));
     }
 
 }
