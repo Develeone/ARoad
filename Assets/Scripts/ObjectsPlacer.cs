@@ -31,23 +31,35 @@ public class ObjectsPlacer : MonoBehaviour
     int camPointersCount        = 0;
     int gasStationPointersCount = 0;
     int parkingPointersCount    = 0;
-
+    
     IEnumerator Start()
     {
-        camCoordinates = CsvParser.ParseCsvCoordinates(camsFile);
+        camCoordinates        = CsvParser.ParseCsvCoordinates(camsFile);
 
         gasStationCoordinates = CsvParser.ParseCsvCoordinates(gasolinesFile);
-        gasolinesPrises = CsvParser.ParceCsvPrises(gasolinesFile);
+        gasolinesPrises       = CsvParser.ParceCsvPrises(gasolinesFile);
 
-        parkingCoordinates = CsvParser.ParseCsvCoordinates(parkingFile);
+        parkingCoordinates    = CsvParser.ParseCsvCoordinates(parkingFile);
 
         while (!GpsTracking.GpsReady)
-        {
-            Debug.Log("Object Placer is waiting until GPS ready...");
             yield return new WaitForSeconds(1);
-        }
 
         worldToSceneCoordinates();
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Label("");
+        GUILayout.Label("");
+        GUILayout.Label("Camers instantiated: " + camPointersCount);
+        GUILayout.Label("Gas Station instantiated: " + gasStationPointersCount);
+        GUILayout.Label("Parking instantiated: " + parkingPointersCount);
+    }
+    
+    void FixedUpdate()
+    {
+        if (!GpsTracking.GpsReady)
+            return;
 
         foreach (Vector2 elem in sceneCamCoordinates)
         {
@@ -56,7 +68,7 @@ public class ObjectsPlacer : MonoBehaviour
 
             if (distanceToObject < 500)
             {
-                GameObject newCamPointer = (GameObject)GameObject.Instantiate(speedCamPointer, currentCam, Quaternion.identity);
+                GameObject newCamPointer       = (GameObject)GameObject.Instantiate(speedCamPointer, currentCam, Quaternion.identity);
                 newCamPointer.transform.parent = camPointersParent;
                 camPointersCount++;
             }
@@ -82,33 +94,13 @@ public class ObjectsPlacer : MonoBehaviour
             Vector3 currentParking = new Vector3(elem.x, 5, elem.y);
             float distanceToObject = Math.Abs(Vector3.Distance(new Vector3(GpsTracking.currentCoordinate.longitude, 5, GpsTracking.currentCoordinate.latitude), currentParking));
 
-            if (distanceToObject < 500)
+            if (distanceToObject < 1000)
             {
                 GameObject newParkingPointer = (GameObject)GameObject.Instantiate(parkingPointer, currentParking, Quaternion.identity);
                 newParkingPointer.transform.parent = parkingPointerParent;
                 parkingPointersCount++;
             }
         }
-
-    }
-
-    void OnGUI()
-    {
-        GUILayout.Label("");
-        GUILayout.Label("");
-        GUILayout.Label("Camers instantiated: " + camPointersCount);
-        GUILayout.Label("Gas Station instantiated: " + gasStationPointersCount);
-        GUILayout.Label("Parking instantiated: " + parkingPointersCount);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    void FixedUpdate()
-    {
-
     }
 
 
