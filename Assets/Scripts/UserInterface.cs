@@ -92,19 +92,19 @@ public class UserInterface : MonoBehaviour {
 	void OnGUI () {
 		GUI.skin = FlatGUISkin;
 
-		if (GUI.Button (new Rect (0,0,50,50), settingsButtonTex)) {
+		if (GUI.Button (new Rect (0, 0, Screen.width/7f, Screen.width/7f), settingsButtonTex)) {
 			showSettings = !showSettings;
 		}
 
-		if (GUI.Button (new Rect (Screen.width-50,Screen.height-50,50,50), addCrashTex)) {
+		if (GUI.Button (new Rect (Screen.width-Screen.width/7f, Screen.height-Screen.width/7f, Screen.width/7f, Screen.width/7f), addCrashTex)) {
 			SettingsController.AddTraficAccident ();
 		}
 
-		if (GUI.Button (new Rect (Screen.width-100,Screen.height-50,50,50), addPoliceTex)) {
+		if (GUI.Button (new Rect (Screen.width-(Screen.width/7f*2f), Screen.height-Screen.width/7f, Screen.width/7f, Screen.width/7f), addPoliceTex)) {
 			SettingsController.AddPolice ();
 		}
 
-		if (GUI.Button (new Rect (Screen.width-150,Screen.height-50,50,50), addMessageTex)) {
+		if (GUI.Button (new Rect (Screen.width-(Screen.width/7f*3f), Screen.height-Screen.width/7f, Screen.width/7f, Screen.width/7f), addMessageTex)) {
 			SettingsController.AddMessage ("ЛОСОСНИ ХУЙЦА, ШАЛАВА УШАСТАЯ");
 		}
 
