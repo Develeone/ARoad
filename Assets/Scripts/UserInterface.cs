@@ -17,6 +17,8 @@ public class UserInterface : MonoBehaviour {
 	bool showSettings = false;
 	Rect settingsRect = new Rect(50, 50, Screen.width-100, Screen.height-100);
 
+	bool showMessageTextInput = false;
+
 	bool showCams = false;
 	bool showGasStations = false;
 	bool showParkings = false;
@@ -26,9 +28,11 @@ public class UserInterface : MonoBehaviour {
 	bool showPolice = false;
 	bool showMessages = false;
 
+	string messageTextToSend = "";
+
 	int gasolineType = 0;
 
-	IEnumerator Start () {
+	void Start () {
 		showCams 		= PlayerPrefs.GetInt ("showCam") == 1 ? true : false;
 		showGasStations = PlayerPrefs.GetInt ("showGasStation") == 1 ? true : false;
 		showParkings 	= PlayerPrefs.GetInt ("showParking") == 1 ? true : false;
@@ -38,19 +42,16 @@ public class UserInterface : MonoBehaviour {
 		showPolice 		= PlayerPrefs.GetInt ("showPolice") == 1 ? true : false;
 		showMessages 	= PlayerPrefs.GetInt ("showMessage") == 1 ? true : false;
 		gasolineType 	= PlayerPrefs.GetInt ("gasolineType");
-
-		while (!GpsTracking.GpsReady) {
-			yield return new WaitForSeconds (1);
-		}
-
-		while (splashScreenVerticalPosition > -(Screen.height+1)) {
-			splashScreenVerticalPosition--;
-			yield return new WaitForSeconds (0.001f);
-		}
-
 	}
 
 	void Update () {
+
+		if (GpsTracking.GpsReady) {
+			if (splashScreenVerticalPosition > -(Screen.height + 1)) {
+				splashScreenVerticalPosition -= 4;
+			}
+		}
+
 		if (showCams != (PlayerPrefs.GetInt ("showCam") == 1 ? true : false)) {
 			PlayerPrefs.SetInt ("showCam", showCams ? 1 : 0);
 			ObjectsPlacer.settingsChanged = true;
@@ -105,11 +106,27 @@ public class UserInterface : MonoBehaviour {
 		}
 
 		if (GUI.Button (new Rect (Screen.width-(Screen.width/7f*3f), Screen.height-Screen.width/7f, Screen.width/7f, Screen.width/7f), addMessageTex)) {
-			SettingsController.AddMessage ("ЛОСОСНИ ХУЙЦА, ШАЛАВА УШАСТАЯ");
+			showMessageTextInput = true;
 		}
 
 		if (showSettings) {
 			settingsRect = GUI.Window (0, settingsRect, SettingsContent, "Настройки");
+		}
+
+		if (showMessageTextInput) {
+			messageTextToSend = GUI.TextField (new Rect(Screen.width*0.1f, Screen.height*0.3f, Screen.width*0.8f, 40), messageTextToSend);
+
+			if (GUI.Button (new Rect(Screen.width*0.1f, Screen.height*0.6f, Screen.width/2f, 50), "Отправить")) {
+				SettingsController.AddMessage (messageTextToSend);
+				showMessageTextInput = false;
+				messageTextToSend = "";
+			}
+
+			if (GUI.Button (new Rect(Screen.width - (Screen.width*0.1f + Screen.width/2f), Screen.height*0.6f, Screen.width/2f, 50), "Отмена")) {
+				showMessageTextInput = false;
+				messageTextToSend = "";
+			}
+
 		}
 
 		if (splashScreenVerticalPosition > -Screen.height)

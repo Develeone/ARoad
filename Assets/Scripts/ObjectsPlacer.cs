@@ -7,7 +7,7 @@ using System;
 public class ObjectsPlacer : MonoBehaviour
 {
     public List<float[]> gasolinesPrises;
-    public static List<string> Messages;
+	public static List<string> Messages = new List<string>();
 
     public List<Vector2> sceneCamCoordinates               = new List<Vector2>();
     public List<Vector2> sceneGasStationCoordinates        = new List<Vector2>();
@@ -131,24 +131,21 @@ public class ObjectsPlacer : MonoBehaviour
 			GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject> ();
 			foreach (GameObject objectToDestroy in allObjects) {
 				if (objectToDestroy.transform.parent != null)
-					if (objectToDestroy.transform.parent.name == "ParkingPointers" || 
-						objectToDestroy.transform.parent.name == "PitStopPointers" ||
-						objectToDestroy.transform.parent.name == "GasStationPointers" ||
-						objectToDestroy.transform.parent.name == "SpeedCamPointers")
+					if (objectToDestroy.transform.parent.name.EndsWith("Pointers") && objectToDestroy.transform.parent.name != "Pointers")
 						GameObject.Destroy (objectToDestroy);
 			}
 			StartCoroutine ("Start");
 			settingsChanged = false;
 		}
 
-        InstancePointer(sceneCamCoordinates, 500, speedCamPointer, camPointersParent, false, instantietedCams);
-        InstancePointer(sceneGasStationCoordinates, 1000, gasStationPointer, gasStationPointerParent, true, instantietedGasStations);
-        InstancePointer(sceneParkingCoordinates, 1000, parkingPointer, parkingPointerParent, false, instantietedParkings);
-        InstancePointer(scenePitStopCoordinates, 1000, pitStopPointer, pitStopPointerParent, false, instantietedPitStops);
-        InstancePointer(sceneTiresCoordinates, 1000, tiresPointer, tiresPointerParent, false, instantietedTires);
-        InstancePointer(sceneCrashCoordinates, 1000, crashPointer, crashPointerParent, false, instantietedCrash);
-        InstancePointer(scenePoliceCoordinates, 1000, policePointer, policePointerParent, false, instantietedPolice);
-        InstancePointer(sceneMessageCoordinates, 1000, messagePointer, messagePointerParent, false, instantietedMessage);
+        InstancePointer(sceneCamCoordinates, 500, speedCamPointer, camPointersParent, 0, instantietedCams);
+        InstancePointer(sceneGasStationCoordinates, 1000, gasStationPointer, gasStationPointerParent, 1, instantietedGasStations);
+        InstancePointer(sceneParkingCoordinates, 1000, parkingPointer, parkingPointerParent, 0, instantietedParkings);
+        InstancePointer(scenePitStopCoordinates, 1000, pitStopPointer, pitStopPointerParent, 0, instantietedPitStops);
+        InstancePointer(sceneTiresCoordinates, 1000, tiresPointer, tiresPointerParent, 0, instantietedTires);
+        InstancePointer(sceneCrashCoordinates, 1000, crashPointer, crashPointerParent, 0, instantietedCrash);
+        InstancePointer(scenePoliceCoordinates, 1000, policePointer, policePointerParent, 0, instantietedPolice);
+        InstancePointer(sceneMessageCoordinates, 1000, messagePointer, messagePointerParent, 2, instantietedMessage);
     }
 
     List<Vector2> worldToSceneCoordinates(List<Coordinate> worldCoordinateList)
@@ -161,7 +158,7 @@ public class ObjectsPlacer : MonoBehaviour
         return sceneCoordinateList;
     }
 
-    void InstancePointer(List<Vector2> sceneCoordinateList, int requiredDistance, GameObject currentPointer, Transform pointerParent, bool setPointerText, GameObject[] instantietedPointerList)
+    void InstancePointer(List<Vector2> sceneCoordinateList, int requiredDistance, GameObject currentPointer, Transform pointerParent, int setPointerText, GameObject[] instantietedPointerList)
     {
 
         for (int i = 0; i < sceneCoordinateList.Count; i++)
@@ -181,12 +178,16 @@ public class ObjectsPlacer : MonoBehaviour
 
                 TextMesh[] textMeshes = newPointer.GetComponentsInChildren<TextMesh>();
 
-                int distanceIndex = textMeshes[0].text.Equals("Price") ? 0 : 1;
+                int textIndex = textMeshes[0].text.Equals("Text") ? 0 : 1;
 
-                if (setPointerText)
+                if (setPointerText > 0)
                 {
-                    TextMesh priceTextMesh = textMeshes[distanceIndex];
-                    priceTextMesh.text = gasolinesPrises[i][PlayerPrefs.GetInt("gasolineType")] + "р";
+                    TextMesh infoTextMesh = textMeshes[textIndex];
+
+					if (setPointerText == 1)
+						infoTextMesh.text = gasolinesPrises[i][PlayerPrefs.GetInt("gasolineType")] + "р";
+					else if (setPointerText == 2)
+						infoTextMesh.text = Messages [i];
                 }
 
                 newPointer.transform.parent = pointerParent;
