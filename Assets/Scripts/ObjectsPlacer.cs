@@ -23,9 +23,9 @@ public class ObjectsPlacer : MonoBehaviour
     public GameObject[] instantietedParkings;
     public GameObject[] instantietedPitStops;
     public GameObject[] instantietedTires;
-    public GameObject[] instantietedCrash;
-    public GameObject[] instantietedPolice;
-    public GameObject[] instantietedMessage;
+    public static GameObject[] instantietedCrash;
+    public static GameObject[] instantietedPolice;
+    public static GameObject[] instantietedMessage;
 
     public GameObject speedCamPointer;
     public GameObject gasStationPointer;

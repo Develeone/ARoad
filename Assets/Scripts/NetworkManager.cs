@@ -21,11 +21,13 @@ public class NetworkManager : MonoBehaviour {
 
     void FixedUpdate()
     {
-
         string socketData = readSocket();
 
         if (!socketData.Equals(""))
+        {
             ServerResponseHandler.HandleServerResponse(socketData);
+            Debug.Log("get: " + socketData);
+        }
     }
 
     public void setupSocket()
@@ -46,6 +48,7 @@ public class NetworkManager : MonoBehaviour {
 
     public static void writeSocket(string theLine)
     {
+        Debug.Log("send: " + theLine);
         if (!socketReady)
             return;
         String foo = theLine + "\r\n";
@@ -57,7 +60,7 @@ public class NetworkManager : MonoBehaviour {
     {
         if (!socketReady)
             return "";
-        if (theStream.DataAvailable)
+        if (theStream.DataAvailable) 
             return theReader.ReadLine();
         return "";
     }
