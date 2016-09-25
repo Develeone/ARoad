@@ -21,11 +21,11 @@ public class NetworkManager : MonoBehaviour {
 
     void FixedUpdate()
     {
-		String socketData = readSocket();
-		if (!socketData.Equals("")) {
-			Debug.Log (socketData);
-			ServerResponseHandler.HandleServerResponse (socketData);
-		}
+
+        string socketData = readSocket();
+
+        if (!socketData.Equals(""))
+            ServerResponseHandler.HandleServerResponse(socketData);
     }
 
     public void setupSocket()
